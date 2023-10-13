@@ -1,9 +1,12 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/responcive/mobile_layout.dart';
+import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/utils/dimensions.dart';
 
 class ResponsiveLayout extends StatelessWidget {
-  final Widget mobileScreen;
-  final Widget webScreen;
+  final Widget mobileScreen, webScreen;
 
   const ResponsiveLayout({
     required this.mobileScreen,
