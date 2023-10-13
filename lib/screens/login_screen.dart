@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   isPassword: true),
               SizedBox(height: 24),
               //
-              // Enter user button
+              // Login user button
               InkWell(
                 onTap: () {},
                 child: Container(
