@@ -1,4 +1,5 @@
 // ignore_for_file: unnecessary_null_comparison
+import 'package:instagram_clone/models/user.dart' as model;
 import 'package:instagram_clone/resources/storage_methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,7 +13,7 @@ class AuthMethods {
   Future<String> signUpUser({
     required String email,
     required String password,
-    required String username,
+    required String userName,
     required String bio,
     required Uint8List file,
   }) async {
@@ -21,7 +22,7 @@ class AuthMethods {
     try {
       if (email.isNotEmpty ||
           password.isNotEmpty ||
-          username.isNotEmpty ||
+          userName.isNotEmpty ||
           bio.isNotEmpty ||
           file != null) {
         //
@@ -29,21 +30,23 @@ class AuthMethods {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
         //
+        // Save image to data base
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('profilePics', file, false);
 
         //
-        // Add user to DB
-        await _db.collection('users').doc(cred.user!.uid).set({
-          'username': username,
-          'uid': cred.user!.uid,
-          'email': email,
-          'bio': bio,
-          'followers': [],
-          'following': [],
-          'photoUrl': photoUrl,
-        });
+        // Add user to data base
+        model.User user = model.User(
+          uId: cred.user!.uid,
+          bio: bio,
+          email: email,
+          photoUrl: photoUrl,
+          userName: userName,
+          followers: [],
+          following: [],
+        );
 
+        await _db.collection('users').doc(cred.user!.uid).set(user.toJson());
         res = 'success';
       }
     } on FirebaseAuthException catch (err) {
