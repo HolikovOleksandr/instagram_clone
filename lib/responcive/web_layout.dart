@@ -8,14 +8,6 @@ class WebScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Instagram web'),
-        leading: Navigator.canPop(context)
-            ? IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.arrow_back_ios_new_rounded))
-            : null,
-      ),
       body: SafeArea(
         child: Center(
           child: Text(

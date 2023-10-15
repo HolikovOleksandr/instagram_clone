@@ -1,15 +1,23 @@
-// ignore_for_file: unnecessary_null_comparison
-import 'package:instagram_clone/models/user.dart' as model;
+// ignore_for_file: unnecessary_null_comparison, avoid_print
 import 'package:instagram_clone/resources/storage_methods.dart';
+import 'package:instagram_clone/models/user.dart' as model;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:typed_data';
 
 class AuthMethods {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  //
-  // Sign up user
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<model.User> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+
+    DocumentSnapshot snap =
+        await _db.collection('users').doc(currentUser.uid).get();
+
+    return model.User.fromSnap(snap);
+  }
+
   Future<String> signUpUser({
     required String email,
     required String password,
@@ -37,11 +45,11 @@ class AuthMethods {
         //
         // Add user to data base
         model.User user = model.User(
-          uId: cred.user!.uid,
+          uid: cred.user!.uid,
           bio: bio,
           email: email,
           photoUrl: photoUrl,
-          userName: userName,
+          username: userName,
           followers: [],
           following: [],
         );

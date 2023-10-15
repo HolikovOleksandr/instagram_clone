@@ -71,7 +71,7 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       );
     }
-    debugPrint(" ======== ${res.toString()} ========");
+
     setState(() => _isLoading = false);
   }
 
