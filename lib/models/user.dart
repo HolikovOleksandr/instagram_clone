@@ -4,10 +4,10 @@ class User {
   final String uid;
   final String bio;
   final String email;
-  final String photoUrl;
-  final String username;
   final List followers;
   final List following;
+  final String photoUrl;
+  final String username;
 
   const User({
     required this.uid,
