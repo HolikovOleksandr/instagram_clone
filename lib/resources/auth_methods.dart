@@ -1,5 +1,4 @@
 // ignore_for_file: unnecessary_null_comparison
-
 import 'package:instagram_clone/resources/storage_methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,7 +16,7 @@ class AuthMethods {
     required String bio,
     required Uint8List file,
   }) async {
-    String res = 'Some error';
+    String res = '';
 
     try {
       if (email.isNotEmpty ||
@@ -54,7 +53,39 @@ class AuthMethods {
         res = 'Password should be at least 6 characters';
       } else if (err.code == 'email-already-in-use') {
         res = 'Email already in use';
+      } else {
+        res = err.toString();
       }
+    }
+
+    return res;
+  }
+
+  //
+  // Login user
+  Future<String> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    String res = '';
+
+    try {
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+
+        res = 'success';
+      } else {
+        res = 'Please enter all the fields';
+      }
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'user-not-found') {
+        res = 'User wasn\'t found';
+      } else if (error.code == 'wrong-password') {
+        res = 'You enter an invalide password';
+      }
+    } catch (err) {
+      res = err.toString();
     }
 
     return res;

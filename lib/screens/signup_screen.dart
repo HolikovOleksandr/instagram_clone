@@ -1,15 +1,19 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
-import 'dart:typed_data';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/responcive/responcive_layout.dart';
+import 'package:instagram_clone/responcive/mobile_layout.dart';
+import 'package:instagram_clone/widgets/text_field_input.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
+import 'package:instagram_clone/responcive/web_layout.dart';
+import 'package:instagram_clone/screens/login_screen.dart';
+import 'package:instagram_clone/widgets/auth_button.dart';
 import 'package:instagram_clone/utils/assets.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
-import 'package:instagram_clone/widgets/text_field_input.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'dart:typed_data';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -55,8 +59,28 @@ class _SignupScreenState extends State<SignupScreen> {
       file: _image!,
     );
 
-    if (res != 'success') showSnackBar(context, res);
+    if (res != 'success') {
+      showSnackBar(context, res);
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => ResponsiveLayout(
+            mobileScreen: MobileScreen(),
+            webScreen: WebScreen(),
+          ),
+        ),
+      );
+    }
+    debugPrint(" ======== ${res.toString()} ========");
     setState(() => _isLoading = false);
+  }
+
+  navigateToLogin() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => LoginScreen(),
+      ),
+    );
   }
 
   @override
@@ -125,29 +149,10 @@ class _SignupScreenState extends State<SignupScreen> {
               SizedBox(height: 24),
               //
               // Create new user button
-              InkWell(
+              AuthButton(
                 onTap: () => signUpUser(),
-                child: Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  decoration: ShapeDecoration(
-                    color: AppColor.blue,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(4))),
-                  ),
-                  child: _isLoading
-                      ? Center(
-                          child: SizedBox(
-                            width: 44,
-                            height: 44,
-                            child: CircularProgressIndicator(
-                              color: AppColor.primary,
-                            ),
-                          ),
-                        )
-                      : Text('Sign up'),
-                ),
+                isLoading: _isLoading,
+                text: 'Sign up',
               ),
               SizedBox(height: 12),
               Spacer(),
@@ -160,7 +165,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   SizedBox(width: 8),
                   GestureDetector(
-                    onTap: null,
+                    onTap: () => navigateToLogin(),
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 8),
                       child: Text(
@@ -171,6 +176,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ],
               ),
+              SizedBox(height: 24),
             ],
           ),
         ),
