@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, deprecated_member_use
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, deprecated_member_use, prefer_typing_uninitialized_variables
 
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
+import 'package:instagram_clone/screens/comments_screen.dart';
 import 'package:instagram_clone/widgets/like_animation.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/models/user.dart';
@@ -135,13 +136,22 @@ class _PostCardState extends State<PostCard> {
                         ),
                   onPressed: () async {
                     await FirestoreMethods().likePost(
-                        widget.snap['postId'], user.uid, widget.snap['likes']);
+                      widget.snap['postId'],
+                      user.uid,
+                      widget.snap['likes'],
+                    );
                   },
                 ),
               ),
               // Comment
               IconButton(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CommentsScreen(
+                      snap: widget.snap['postId'].toString(),
+                    ),
+                  ),
+                ),
                 icon: const Icon(
                   Icons.comment,
                   color: AppColor.primary,
@@ -213,7 +223,13 @@ class _PostCardState extends State<PostCard> {
                 ),
                 SizedBox(height: 8),
                 InkWell(
-                  onTap: () {},
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CommentsScreen(
+                        snap: widget.snap['postId'].toString(),
+                      ),
+                    ),
+                  ),
                   child: Text(
                     'View all 1997 comments',
                     style: TextStyle(
